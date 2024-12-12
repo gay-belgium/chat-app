@@ -1,0 +1,5 @@
+# Negeer node_modules map
+node_modules/
+
+# Negeer package-lock.json bestand
+package-lock.json
