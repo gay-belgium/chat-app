@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chat App</title>
+  <script src="/socket.io/socket.io.js"></script>
+</head>
+<body>
+  <h1>Welkom in de Chat!</h1>
+  <ul id="messages"></ul>
+  <form id="form" action="">
+    <input id="input" autocomplete="off" placeholder="Typ je bericht..." />
+    <button>Verstuur</button>
+  </form>
+
+  <script>
+    const socket = io();
+
+    // Stuur bericht naar de server
+    document.getElementById('form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const message = document.getElementById('input').value;
+      socket.emit('chatMessage', message);
+      document.getElementById('input').value = '';
+    });
+
+    // Ontvang berichten van de server
+    socket.on('chatMessage', (msg) => {
+      const li = document.createElement('li');
+      li.textContent = msg;
+      document.getElementById('messages').appendChild(li);
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard</title>
+  <style>
+    .profile { border: 1px solid #ddd; padding: 10px; margin-bottom: 10px; }
+    .profile img { max-width: 100px; }
+  </style>
+</head>
+<body>
+  <h1>Dashboard</h1>
+
+  <!-- Linkerkolom: Nieuwe bezoekers -->
+  <div id="left-column">
+    <h2>Nieuwe Bezoekers</h2>
+    <!-- Dynamisch toevoegen van nieuwe bezoekers hier -->
+  </div>
+
+  <!-- Middenkolom: Alle gebruikers gesorteerd op afstand -->
+  <div id="middle-column">
+    <h2>Alle Gebruikers</h2>
+    <!-- Dynamisch sorteren en weergeven van gebruikers hier -->
+  </div>
+
+  <!-- Derde Kolom: Profiel van de geselecteerde gebruiker -->
+  <div id="right-column">
+    <h2>Jouw Profiel</h2>
+    <div id="profile-info">
+      <!-- Hier wordt het profiel weergegeven -->
+    </div>
+  </div>
+
+  <script>
+    // Functie om een profiel weer te geven in de derde kolom
+    function showProfile(user) {
+      const profileInfo = document.getElementById('profile-info');
+      profileInfo.innerHTML = `
+        <div class="profile">
+          <h3>${user.nickname}</h3>
+          <p><strong>Beschrijving:</strong> ${user.description}</p>
+          <p><strong>Locatie:</strong> ${user.location}</p>
+          <h4>Foto's:</h4>
+          <div id="profile-photos"></div>
+        </div>
+      `;
+      const photosDiv = document.getElementById('profile-photos');
+      user.photos.forEach(photo => {
+        const img = document.createElement('img');
+        img.src = photo;
+        photosDiv.appendChild(img);
+      });
+    }
+
+    // Testen door een voorbeeldgebruiker weer te geven
+    const exampleUser = {
+      nickname: 'TestUser',
+      description: 'Dit is een testgebruiker',
+      location: 'Nederland',
+      photos: ['url_naar_foto_1', 'url_naar_foto_2']
+    };
+    showProfile(exampleUser);
+
+    // Dynamisch ophalen van gebruikers (via API)
+    fetch('http://localhost:3000/api/users')
+      .then(response => response.json())
+      .then(data => {
+        // We kunnen bijvoorbeeld de eerste gebruiker in de lijst weergeven
+        const firstUser = data[Object.keys(data)[0]]; // De eerste gebruiker
+        showProfile(firstUser); // Toon het profiel van de eerste gebruiker
+      })
+      .catch(error => console.error('Fout bij het ophalen van gebruikers:', error));
+  </script>
+</body>
+</html>
